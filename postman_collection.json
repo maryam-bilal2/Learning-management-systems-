@@ -1,0 +1,164 @@
+{
+  "info": {
+    "_postman_id": "lms-api-collection",
+    "name": "LMS API - Local",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for the LMS backend (dev). Set {{baseUrl}} and use {{token}} for auth."
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"seed-educator@example.local\",\n  \"password\": \"Ed!Tmp#2025a\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api","auth","login"] }
+      }
+    },
+    {
+      "name": "Auth - Register (legacy)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"New User\",\n  \"email\": \"new@example.com\",\n  \"password\": \"devpassword\"\n}" },
+        "url": { "raw": "{{baseUrl}}/api/auth/register", "host": ["{{baseUrl}}"], "path": ["api","auth","register"] }
+      }
+    },
+    {
+      "name": "Auth - Send Registration OTP",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"OTP User\",\n  \"email\": \"otp@example.com\",\n  \"password\": \"devpassword\"\n}" },
+        "url": { "raw": "{{baseUrl}}/api/auth/send-registration-otp", "host": ["{{baseUrl}}"], "path": ["api","auth","send-registration-otp"] }
+      }
+    },
+    {
+      "name": "Auth - Refresh Token",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{baseUrl}}/api/auth/refresh-token", "host": ["{{baseUrl}}"], "path": ["api","auth","refresh-token"] }
+      }
+    },
+    {
+      "name": "User - Get Profile",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": { "raw": "{{baseUrl}}/api/user/profile", "host": ["{{baseUrl}}"], "path": ["api","user","profile"] }
+      }
+    },
+    {
+      "name": "User - Update Profile",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }],
+        "body": { "mode": "raw", "raw": "{\n  \"name\": \"Updated Name\",\n  \"bio\": \"Hello from Postman\"\n}" },
+        "url": { "raw": "{{baseUrl}}/api/user/profile", "host": ["{{baseUrl}}"], "path": ["api","user","profile"] }
+      }
+    },
+    {
+      "name": "User - Upload Avatar",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "avatar", "type": "file", "src": "" }
+          ]
+        },
+        "url": { "raw": "{{baseUrl}}/api/user/profile/upload-avatar", "host": ["{{baseUrl}}"], "path": ["api","user","profile","upload-avatar"] }
+      }
+    },
+    {
+      "name": "Course - Get All",
+      "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/course/all", "host": ["{{baseUrl}}"], "path": ["api","course","all"] } }
+    },
+    {
+      "name": "Course - Search",
+      "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/course/search?query=react", "host": ["{{baseUrl}}"], "path": ["api","course","search"], "query": [{ "key": "query", "value": "react" }] } }
+    },
+    {
+      "name": "Course - Create",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }],
+        "body": { "mode": "raw", "raw": "{\n  \"title\": \"My New Course\",\n  \"description\": \"Course created from Postman\",\n  \"price\": 99,\n  \"totalDuration\": 120\n}" },
+        "url": { "raw": "{{baseUrl}}/api/course/create", "host": ["{{baseUrl}}"], "path": ["api","course","create"] }
+      }
+    },
+    {
+      "name": "Course - My Courses",
+      "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": { "raw": "{{baseUrl}}/api/course/my-courses", "host": ["{{baseUrl}}"], "path": ["api","course","my-courses"] } }
+    },
+    {
+      "name": "Course - Update (JSON)",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }],
+        "body": { "mode": "raw", "raw": "{\n  \"title\": \"Updated course title\",\n  \"price\": 79\n}" },
+        "url": { "raw": "{{baseUrl}}/api/course/{{courseId}}/update", "host": ["{{baseUrl}}"], "path": ["api","course","{{courseId}}","update"] }
+      }
+    },
+    {
+      "name": "Course - Update (thumbnail upload)",
+      "request": {
+        "method": "PATCH",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "body": { "mode": "formdata", "formdata": [ { "key": "thumbnail", "type": "file", "src": "" }, { "key": "title", "type": "text", "value": "With new thumbnail" } ] },
+        "url": { "raw": "{{baseUrl}}/api/course/{{courseId}}/update", "host": ["{{baseUrl}}"], "path": ["api","course","{{courseId}}","update"] }
+      }
+    },
+    {
+      "name": "Chapter - Create",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }, { "key": "Authorization", "value": "Bearer {{token}}" }],
+        "body": { "mode": "raw", "raw": "{\n  \"chapterTitle\": \"Intro\",\n  \"chapterId\": \"ch1\"\n}" },
+        "url": { "raw": "{{baseUrl}}/api/chapter/{{courseId}}", "host": ["{{baseUrl}}"], "path": ["api","chapter","{{courseId}}"] }
+      }
+    },
+    {
+      "name": "Lecture - Create (upload video)",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "body": { "mode": "formdata", "formdata": [ { "key": "video", "type": "file", "src": "" }, { "key": "title", "type": "text", "value": "Lecture 1" } ] },
+        "url": { "raw": "{{baseUrl}}/api/lecture/{{courseId}}/{{chapterId}}", "host": ["{{baseUrl}}"], "path": ["api","lecture","{{courseId}}","{{chapterId}}"] }
+      }
+    },
+    {
+      "name": "Video - Upload",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "body": { "mode": "formdata", "formdata": [ { "key": "video", "type": "file", "src": "" } ] },
+        "url": { "raw": "{{baseUrl}}/api/video/upload", "host": ["{{baseUrl}}"], "path": ["api","video","upload"] }
+      }
+    },
+    {
+      "name": "Payment - Create Checkout Session",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{\n  \"courseId\": \"{{courseId}}\",\n  \"courseName\": \"My Course\",\n  \"coursePrice\": 19900\n}" },
+        "url": { "raw": "{{baseUrl}}/api/payment/create-checkout-session", "host": ["{{baseUrl}}"], "path": ["api","payment","create-checkout-session"] }
+      }
+    },
+    {
+      "name": "Debug - All Courses (dev)",
+      "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/api/debug/courses", "host": ["{{baseUrl}}"], "path": ["api","debug","courses"] } }
+    }
+  ]
+}
